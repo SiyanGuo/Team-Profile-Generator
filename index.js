@@ -1,6 +1,9 @@
 const inquirer = require('inquirer');
+const generatePage = require('./src/page-template');
+const {writeFile,copyFile } = require('./utils/generate-site');
+ 
 
-// [chooseTeam, school, github, officeNum,fullName,id,email ] 
+//questions array
 const [chooseTeam, school, github, officeNum, fullName, id, email] = [
     {
         type: 'list',
@@ -91,21 +94,23 @@ const [chooseTeam, school, github, officeNum, fullName, id, email] = [
     },
 ]
 
-//the team manager’s name, employee ID, email address, and office number
-
+//prompt for manager info
 const promptManager = () => {
-    // console.log(fullName,id,email, officeNum, chooseTeam);
     return inquirer.prompt([fullName, id, email, officeNum, chooseTeam])
 };
 
+//prompt for engineer info
 const promptEngineer = (teamInfo) => {
+    //create an empty engineer array if there is none
     if (!teamInfo.engineer) {
         teamInfo.engineer = [];
     }
     return inquirer
         .prompt([fullName, id, email, github, chooseTeam])
         .then(engineerInput => {
+            //save this engineer infor into array
             teamInfo.engineer.push(engineerInput);
+            //check if want to add more team member
             if (engineerInput.chooseTeam === 'Engineer') {
                 return promptEngineer(teamInfo)
             } else if (engineerInput.chooseTeam === 'Intern') {
@@ -117,14 +122,18 @@ const promptEngineer = (teamInfo) => {
         )
 };
 
+//prompt for intern info
 const promptIntern = (teamInfo) => {
+    //create an empty engineer array if there is none
     if (!teamInfo.intern) {
         teamInfo.intern = [];
     }
     return inquirer
         .prompt([fullName, id, email, school, chooseTeam])
         .then(internInput => {
+            //save this intern infor into array
             teamInfo.intern.push(internInput);
+            //check if want to add more team member
             if (internInput.chooseTeam === 'Engineer') {
                 return promptEngineer(teamInfo)
             } else if (internInput.chooseTeam === 'Intern') {
@@ -135,12 +144,12 @@ const promptIntern = (teamInfo) => {
         })
 };
 
-
+//check which team to prompt
 const addTeam = (managerInfo) => {
     if (managerInfo.chooseTeam === 'Engineer') {
         return promptEngineer(managerInfo);
     } else if (managerInfo.chooseTeam === 'Intern') {
-       return  promptIntern(managerInfo)
+        return promptIntern(managerInfo)
     } else {
         return managerInfo;
     }
@@ -148,5 +157,20 @@ const addTeam = (managerInfo) => {
 
 promptManager()
     .then(addTeam)
-    .then(answers => console.log(answers))
+    .then(teamData =>{
+        return generatePage(teamData);
+    })
+    .then(pageHTML =>{
+        return writeFile(pageHTML);
+    })
+    .then(writeFileResponse =>{
+        console.log(writeFileResponse);
+        return copyFile();
+    })
+    .then(copyFileResponse =>{
+        console.log(copyFileResponse);
+    })
+    .catch(err =>{
+        console.log(err);
+    })
 

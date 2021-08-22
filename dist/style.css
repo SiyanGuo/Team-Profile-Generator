@@ -98,7 +98,7 @@
     text-decoration: none;
   }
   
-  a:visited {
+  a:active {
     color:var(--dark);
     background-color: transparent;
     text-decoration: underline;
