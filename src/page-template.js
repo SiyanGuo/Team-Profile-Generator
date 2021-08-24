@@ -19,7 +19,7 @@ const generateManager = manager => {
 };
 
 const generateEngineer = engineer => {
-
+    if (!engineer) return '';
     return `
     ${engineer
             .map(({ fullName, id, email, github }) => {
@@ -40,15 +40,15 @@ const generateEngineer = engineer => {
             </div>
         </section>
         `
-                    
             })
             .join('')
         }`
 };
 
 const generateIntern = intern => {
+    if (!intern) return '';
     return `
-    ${intern.map(({ fullName, id, email, school }) => {
+    ${intern.map(({fullName, id, email, school }) => {
         return `
         <section class="card col-12 col-md-3 mb-2">
             <div class="card-header bg-dark">
@@ -67,8 +67,8 @@ const generateIntern = intern => {
         </section>
         `
     })
-    .join('')
-}`
+            .join('')
+        }`
 };
 
 const generatePage = teamData => {

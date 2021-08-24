@@ -95,13 +95,13 @@
   a:hover {
     color:var(--primary);
     background-color: transparent;
-    text-decoration: none;
+    text-decoration: underline;
   }
   
   a:visited {
-    color:var(--dark);
+    color:var(--primary);
     background-color: transparent;
-    text-decoration: underline;
+    text-decoration: none;
   }
 
 

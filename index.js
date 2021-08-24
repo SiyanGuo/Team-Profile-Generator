@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 const generatePage = require('./src/page-template');
 const {writeFile,copyFile } = require('./utils/generate-site');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
  
 
 //questions array
@@ -109,7 +111,8 @@ const promptEngineer = (teamInfo) => {
         .prompt([fullName, id, email, github, chooseTeam])
         .then(engineerInput => {
             //save this engineer infor into array
-            teamInfo.engineer.push(engineerInput);
+            const engineer = new Engineer (engineerInput.fullName, engineerInput.id, engineerInput.email, engineerInput.github)
+            teamInfo.engineer.push(engineer);
             //check if want to add more team member
             if (engineerInput.chooseTeam === 'Engineer') {
                 return promptEngineer(teamInfo)
@@ -132,7 +135,8 @@ const promptIntern = (teamInfo) => {
         .prompt([fullName, id, email, school, chooseTeam])
         .then(internInput => {
             //save this intern infor into array
-            teamInfo.intern.push(internInput);
+            const intern = new Intern (internInput.fullName, internInput.id, internInput.email, internInput.school)
+            teamInfo.intern.push(intern);
             //check if want to add more team member
             if (internInput.chooseTeam === 'Engineer') {
                 return promptEngineer(teamInfo)
