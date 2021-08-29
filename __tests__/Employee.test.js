@@ -3,7 +3,7 @@ const Employee = require('../lib/Employee');
 test('creates a employee object', ()=>{
     const employee = new Employee('Lisa', 1, 'e@t.com');
 
-    expect(employee.name).toBe('Lisa');
+    expect(employee.fullName).toBe('Lisa');
     expect(employee.id).toEqual(expect.any(Number));
     expect(employee.email).toEqual(expect.stringContaining('@','.com'));
 });
